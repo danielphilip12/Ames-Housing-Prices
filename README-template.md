@@ -1,8 +1,8 @@
 # Your Title Goes Here
 
 ## Problem Statement
-- Provide a brief background or context for your analysis. Explain why the data is relevant or interesting.
-- Clearly state the purpose of your analysis. What are you aiming to achieve or communicate through this analysis? Who would this benefit?
+- This dataset contains a list of different house prices in Ames, IA. 
+- The purpose of this analysis is to determine if we can predict the price of a house, based on different features. 
 
 ## Data Dictionary
 Include a data dictionary to explain the meaning of each variable or field in the dataset. You can also link to an external data dictionary.
@@ -41,7 +41,7 @@ Summarize the performance of the model(s) using key evaluation metrics (e.g., RM
 
 | Model             | RMSE     | R²       |
 |-------------------|----------|----------|
-| Model 1           | [Value]  | [Value]  |
+| Linear Regression | 30,019   | 0.86     |
 | Model 2 (if any)  | [Value]  | [Value]  |
 
 ### Kaggle Submissions (if applicable)
