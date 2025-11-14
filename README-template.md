@@ -9,9 +9,30 @@ Here I will include a Data Dictionary of the different features I used in the mo
 
 | Column Name | Description |
 |-------------|-------------|
-| Column1     | Description1 |
-| Column2     | Description2 |
-| ...         | ...         |
+| Overall Qual     | Rates the overall material and finish of the house |
+| Exter Qual     | Evaluates the quality of the material on the exterior  |
+| Kitchen Qual         | Kitchen Quality |
+| Bsmt Qual         | Evaluates the height of the basement |
+| HeatingQC         | Heating quality and condition|
+| Garage Qual         | Garage Quality         |
+| Overall Cond         | Rates the overall condition of the house         |
+| Bsmt Cond         | Evaluates the general condition of the basement         |
+| Garage Cond         | Garage condition         |
+| Gr Liv Area         | Above grade (ground) living area square feet         |
+| Lot Shape         | General shape of property         |
+| Total Full Bath         | Sum of above ground full baths and basement full baths         |
+| Total Half Bath         | Sum of above ground half baths and basement half baths         |
+| TotRms AbvGrd         | Total rooms above grade (does not include bathrooms)         |
+| Garage Area         | Size of garage in square feet         |
+| Misc Val         | Value of miscellaneous feature         |
+| Total Bsmt SF         | Total square feet of basement area         |
+| House Style         | Style of dwelling         |
+| Bldg Type         | Type of dwelling         |
+| Sale Condition         | Condition of sale         |
+| Sale Type         | Type of sale         |
+| Neighborhood         | Physical locations within Ames city limits (map available)         |
+| Misc Feature         | Miscellaneous feature not covered in other categories         |
+| Garage Type         | Garage location         |
 
 ## Executive Summary
 
@@ -58,7 +79,7 @@ This is a scatterplot of the actual prices on the X-axis, and my model's predict
 Mention the Kaggle competition results or leaderboard placement if relevant.
 
 ## Conclusions/Recommendations
-With the features I chose to include, I was able to create a very strong prediction algorithim to accuarately predict housing prics within $30,000. From the features I included, many of them related to the quality/condition of different aspects of the house, like overall quality, exterior quality, kitchen quality, etc. as these all had strong positive correlations to the sale price. This indicates that the better quality of the house, the better the sale price would be. There should be professional teams that improve the quality of a home before it is put on the market. 
+With the features I chose to include, I was able to create a very strong prediction algorithim to accuarately predict housing prices within $30,000. From the features I included, many of them related to the quality/condition of different aspects of the house, like overall quality, exterior quality, kitchen quality, etc. as these all had strong positive correlations to the sale price. This indicates that the better quality of the house, the better the sale price would be. There should be professional teams that improve the quality of a home before it is put on the market. 
 
 ## Additional Information
 Include any additional information, references, or resources that might be relevant for understanding the analysis.
