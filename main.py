@@ -125,3 +125,168 @@ df['Total Full Bath'] = df['Full Bath'] + df['Bsmt Full Bath']
 # creates a new column, Total Full Bath, which is the sum of Full Bath (above ground) and Basement Full Bath
 df['Total Half Bath'] = df['Half Bath'] + df['Bsmt Half Bath']
 # creates a new column, Total Half Bath, which is the sum of Half Bath (above ground) and Basement Half Bath
+
+for col in ordinal_columns:
+    df[f"{col}_codes"] = df[col].cat.codes
+    # this is creating the category codes for the ordinal columns, so we can start to make comparisons to the sale price
+
+
+# These are the plots. Commented out to not run every time this is run. 
+"""
+
+sns.scatterplot(data=df, x='Year Built', y='SalePrice', color='yellowgreen')
+plt.title("Year Built vs Sale Price")
+plt.ylabel("Sale Price")
+plt.savefig("../images/yr_built_vs_sale.png")
+# Creates a scatterplot comparing Year Built to Sale Price
+
+sns.regplot(data=df, x='Lot Area', y='SalePrice', color='orangered')
+plt.title("Lot Area (sq ft) vs Sale Price")
+plt.ylabel("Sale Price (in millions)")
+plt.xlabel("Lot Area (sq ft)")
+plt.savefig("../images/lot_area_vs_sale.png")
+# Creates a regression plot comparing Lot Area to Sale Price
+
+sns.scatterplot(data=df, x='Gr Liv Area', y='SalePrice', color='cornflowerblue')
+plt.title("Above Ground Living Area (sq ft) vs Sale Price")
+plt.xlabel("Above Ground Living Area (sq ft)")
+plt.ylabel("Sale Price")
+plt.savefig("../images/abv_gr_liv_area_vs_sale.png")
+# creates a scatterplot compare above ground living area to sale price
+
+sns.histplot(data=df.loc[df['Garage Area'] > 0, 'Garage Area'], kde=True)
+plt.title("Distribution of Garage Area (sq ft)")
+plt.xlabel("Garage Area (sq ft)");
+plt.savefig("../images/hist_of_garage_area.png")
+# Creates a histogram of the distribution of Garage Area (filtering out rows with no garage)
+
+sns.regplot(data=df, x='Total Full Bath', y='SalePrice', color='violet')
+plt.title("Full Bath Count vs Sale Price")
+plt.xlabel("Count of Total Full Bath")
+plt.ylabel("Sale Price")
+plt.savefig("../images/full_bath_vs_sale.png")
+# creates a regression plot of the total full bath count and sale price
+
+sns.regplot(data=df, x='Total Half Bath', y='SalePrice', color='gold')
+plt.title("Half Bath Count vs Sale Price")
+plt.xlabel("Count of Total Half Bath")
+plt.ylabel("Sale Price")
+plt.savefig("../images/half_bath_vs_sale.png")
+# creates a regression plot of the total full bath count and sale price
+
+sns.boxplot(data=df, x='SalePrice', hue='Garage Qual')
+plt.title("Distribution of Sale Price by Garage Quality")
+plt.legend(labels=['No Garage', 'Poor', 'Fair', 'Typical', 'Good', 'Excellent'])
+plt.savefig("../images/garage_qual_sale_dist.png")
+# creates boxplots grouped by Garage Quality, and updates the legend to have full label names
+
+sns.regplot(data=df.loc[df['Total Bsmt SF'] > 0, :], x='Total Bsmt SF', y='SalePrice', color='green', line_kws={'color': 'red'})
+plt.title("Total Basement Area (sq ft) vs Sale Price")
+plt.xlabel("Total Basement Area (sq ft)")
+plt.ylabel("Sale Price")
+plt.savefig("../images/bsmt_area_vs_sale.png")
+# creates a regression plot, comparing the total basement square footage and sale price
+
+sns.boxplot(data=df, x='SalePrice', hue='Bsmt Qual')
+plt.title("Distribution of Sale Price by Basement Height")
+plt.xlabel("Sale Price")
+plt.legend(labels=["No Basement","Poor (< 70 inches)", "Fair (70-79 inches)", "Typical (80-89 inches)", "Good (90-99 inches)", "Excellent (100+ inches)"])
+plt.savefig("../images/base_height_sale_dist.png")
+# creates boxplots grouped by Garage Quality, and updates the legend to have descriptive label names
+
+ax = sns.countplot(data=df, x='Bsmt Cond')
+ax.bar_label(ax.containers[0])
+plt.title("Counts of Basement Conditions")
+plt.xlabel("Basement Condition")
+plt.savefig("../images/count_of_base_cond.png")
+# creates a countplot of the different basement conditions
+
+sns.barplot(data=df, x='Bsmt Cond', y='SalePrice', estimator='mean')
+plt.title("Average Sale Price by Basement Condition")
+plt.xlabel("Basement Condition")
+plt.ylabel("Sale Price")
+plt.savefig("../images/avg_sale_by_base_cond.png")
+# creates a barplot showing the mean sale price by basement conditions
+
+sns.regplot(data=df, x='Fireplaces', y='SalePrice')
+plt.title("Relationship between Fireplaces and Sale Price")
+plt.xlabel("Number of Fireplaces")
+plt.ylabel("Sale Price")
+plt.savefig("../images/fireplace_vs_sale.png")
+# creates a regression plot between fireplaces and sale price
+
+for col in ordinal_columns:
+    df[f"{col}_codes"] = df[col].cat.codes
+    # this is creating the category codes for the ordinal columns, so we can start to make comparisons to the sale price
+
+sns.regplot(data=df, x='Lot Shape_codes', y='SalePrice')
+plt.xlabel("Lot Shape Codes")
+plt.ylabel("Sale Price")
+plt.xticks(
+    ticks=range(len(df['Lot Shape'].cat.categories)),
+    labels=df['Lot Shape'].cat.categories,
+    rotation=45
+);
+plt.savefig("../images/lot_shape_vs_sale.png")
+# creates a regression plot comparing the Lot Shape (codes) and the Sale Price
+
+sns.regplot(data=df, x='Overall Qual_codes', y='SalePrice')
+plt.title("Overall Quality vs Sale Price")
+plt.xlabel("Overall Quality")
+plt.ylabel("Sale Price")
+plt.xticks(
+    ticks=range(len(df['Overall Qual'].cat.categories)),
+    labels=df['Overall Qual'].cat.categories,
+    rotation=45
+);
+plt.savefig("../images/overall_qual_vs_sale.png")
+# creates a regression plot comparing the Overall House Quality (codes) and the Sale Price
+
+sns.regplot(data=df, x='Exter Qual_codes', y='SalePrice')
+plt.xlabel("Exterior Quality")
+plt.ylabel("Sale Price")
+plt.xticks(
+    ticks=range(len(df['Exter Qual'].cat.categories)),
+    labels=df['Exter Qual'].cat.categories,
+    rotation=45
+);
+plt.savefig("../images/exter_qual_vs_sale.png")
+# creates a regression plot comparing the Exterior Quality (codes) and the Sale Price
+
+sns.regplot(data=df, x='Kitchen Qual_codes', y='SalePrice')
+plt.xlabel("Kitchen Quality")
+plt.ylabel("Sale Price")
+plt.xticks(
+    ticks=range(len(df['Kitchen Qual'].cat.categories)),
+    labels=df['Kitchen Qual'].cat.categories,
+    rotation=45
+);
+plt.savefig("../images/kitchen_qual_vs_sale.png")
+# creates a regression plot comparing the Kitchen Quality (codes) and the Sale Price
+
+sns.regplot(data=df, x='Heating QC_codes', y='SalePrice')
+plt.xticks(
+    ticks=range(len(df['Heating QC'].cat.categories)),
+    labels=df['Heating QC'].cat.categories,
+    rotation=45
+);
+plt.xlabel("Heating Quality Codes")
+plt.ylabel("Sale Price")
+plt.savefig("../images/heat_qual_vs_sale.png")
+# creates a regression plot comparing the Heating Quality (codes) and the Sale Price
+
+saleprice_corrs = df.corr(numeric_only=True)[['SalePrice']].sort_values(by='SalePrice', ascending=False)
+# creates the correlations between all the numeric columns and the SalePrice
+
+plt.figure(figsize=(8, 15))
+sns.heatmap(saleprice_corrs,
+           vmin=-1,
+           vmax=1,
+           cmap='coolwarm',
+           annot=True)
+# creates a heatmap of the previously made correlation map
+
+df.to_csv('../data/cleaned_ameshousing.csv', index=False)
+# creates a new csv file of the cleaned dataset. 
+
+"""
