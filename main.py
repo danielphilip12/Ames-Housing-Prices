@@ -3,6 +3,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+from sklearn.linear_model import LinearRegression, Ridge, Lasso
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import root_mean_squared_error
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.svm import LinearSVR
+from sklearn.ensemble import RandomForestRegressor
+
 df = pd.read_csv('../data/ameshousing.csv')
 # reads in the dataset as a dataframe from the csv
 
@@ -215,9 +222,7 @@ plt.ylabel("Sale Price")
 plt.savefig("../images/fireplace_vs_sale.png")
 # creates a regression plot between fireplaces and sale price
 
-for col in ordinal_columns:
-    df[f"{col}_codes"] = df[col].cat.codes
-    # this is creating the category codes for the ordinal columns, so we can start to make comparisons to the sale price
+
 
 sns.regplot(data=df, x='Lot Shape_codes', y='SalePrice')
 plt.xlabel("Lot Shape Codes")
@@ -286,7 +291,116 @@ sns.heatmap(saleprice_corrs,
            annot=True)
 # creates a heatmap of the previously made correlation map
 
+
+
+"""
+
 df.to_csv('../data/cleaned_ameshousing.csv', index=False)
 # creates a new csv file of the cleaned dataset. 
 
-"""
+features = ['Overall Qual_codes', 'Exter Qual_codes', 'Kitchen Qual_codes', 'Bsmt Qual_codes', \
+           'Heating QC_codes', 'Garage Qual_codes', 'Gr Liv Area', \
+           'Lot Shape_codes', 'Total Full Bath', 'Total Half Bath', \
+           'TotRms AbvGrd', 'Garage Area', 'Overall Cond_codes', 'Misc Val', \
+           'Total Bsmt SF', 'Bsmt Cond_codes', 'Garage Area', 'Garage Cond_codes', 'Lot Area']
+# the list of features to use in the model
+nominal_features = ['House Style', 'Bldg Type', 'Sale Condition', \
+                    'Neighborhood', 'Misc Feature', 'Sale Type', 'Garage Type'] 
+# list of nominal features to use in the model
+
+
+X = df[features+nominal_features]
+# independant variables
+y = df['SalePrice']
+# target variable
+
+X = pd.get_dummies(X, columns=nominal_features) 
+# makes the duummy variables for the nomianl independent variables
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
+# splits the dataset into training (75% of the data) and testing (25% of the data) sets.
+
+lr = LinearRegression()
+# instantiates the linear regression model
+
+lr.fit(X_train, y_train)
+# trains the linear regression model on the training data and labels 
+
+def get_scores(model, X_train, X_test, y_train, y_test):
+    """
+    Creator: Daniel Gallo
+    Inputs:
+        model: the trained machine learning model on the X_train and y_train created previously. 
+        X_train: the features of the training set from train_test_split
+        X_test: the feautres of the testing set from train_test_split
+        y_train: the targets of the training set from train_test_split
+        y_test: the targets of the testing set from train test split
+    Outputs: Prints the r-squared score of the models predictions of the training set and testing set
+    Creates a baseline RMSE score, as well as RMSE scores for training and testing set. 
+    Outputs all the scores for comparison
+
+    Notes:
+    Model passed in MUST BE fit to the data prior. train_test_split must also occur BEFORE this method invocation. 
+    """
+    print(f"Training R-Squared Score:\t{model.score(X_train, y_train)}")
+    print(f"Testing R-Squared Score:\t{model.score(X_test, y_test)}")
+    train_preds = model.predict(X_train)
+    test_preds = model.predict(X_test)
+    print(f"Training RMSE Score:\t\t{root_mean_squared_error(y_train, train_preds)}")
+    print(f"Testing RMSE Score:\t\t{root_mean_squared_error(y_test, test_preds)}")
+    test_mean = y_test.mean()
+    baseline_preds = np.full_like(y_test, test_mean)
+    print(f"Baseline RMSE Score:\t\t{root_mean_squared_error(y_test, baseline_preds)}")
+
+get_scores(lr, X_train, X_test, y_train, y_test)
+# gets the R2 and RMSE scores of the linear regression model 
+
+
+alphas = [0.1, 1.0, 10.0, 100.0, 1000.0]
+# list of different alphas for ridge regression for regularization
+for a in alphas:
+    ridge = Ridge(alpha=a)
+    # instantiates the ridge model with the alpha
+    ridge.fit(X_train, y_train)
+    # trains the model 
+    print(f"Alpha = {a}")
+    print('=' * 20)
+    get_scores(ridge, X_train, X_test, y_train, y_test)
+    # output the scores. 
+    print('=' * 20)
+
+alphas = [0.1, 1.0, 10.0, 100.0, 1000.0]
+for a in alphas:
+    lasso = Lasso(alpha=a)
+    # instantiates lasso regression model
+    lasso.fit(X_train, y_train)
+    # trains the model
+    print(f"Alpha = {a}")
+    print('=' * 20)
+    get_scores(lasso, X_train, X_test, y_train, y_test)
+    print('=' * 20)
+
+
+rf = RandomForestRegressor()
+# instantiates the random forest model
+ls = LinearSVR(max_iter=20000)
+# instantiates the linear support vector regression model
+dtr = DecisionTreeRegressor()
+# instantiates the decision tree regression model.
+
+models = {'Random Forest': rf, 'Linear SVR': ls, 'Decision Tree': dtr}
+# dictionary of different models to loop through. 
+
+for name, model in models.items():
+    print(name)
+    print("=" * 20)
+    model.fit(X_train, y_train)
+    # trains each model on the training set
+    print()
+
+for name, model in models.items():
+    print(name)
+    print("=" * 20)
+    get_scores(model, X_train, X_test, y_train, y_test)
+    # prints the scores ofr each model
+    print()
