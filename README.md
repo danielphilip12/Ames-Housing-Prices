@@ -1,118 +1,86 @@
-# 🏡 Ames Housing Data Project
-Welcome to our next project! It's time to start exploring and modeling. 🚀
+# Your Title Goes Here
 
-#### Refrence
-The Ames Housing dataset was compiled by Dean De Cock in 2011, for use in data science education.
+## Problem Statement
+- This dataset contains a list of different house prices in Ames, IA. 
+- The purpose of this analysis is to determine if we can predict the price of a house, based on different features. 
 
-* * * * *
+## Data Dictionary
+Here I will include a Data Dictionary of the different features I used in the modeling process. For a complete list of features, please see this file: [File](./data/DataDocumentation.txt)
 
-### Part 1: Exploratory Data Analysis (EDA) and Data Cleaning 🧑‍🔬
+| Column Name | Description |
+|-------------|-------------|
+| Overall Qual     | Rates the overall material and finish of the house |
+| Exter Qual     | Evaluates the quality of the material on the exterior  |
+| Kitchen Qual         | Kitchen Quality |
+| Bsmt Qual         | Evaluates the height of the basement |
+| HeatingQC         | Heating quality and condition|
+| Garage Qual         | Garage Quality         |
+| Overall Cond         | Rates the overall condition of the house         |
+| Bsmt Cond         | Evaluates the general condition of the basement         |
+| Garage Cond         | Garage condition         |
+| Gr Liv Area         | Above grade (ground) living area square feet         |
+| Lot Shape         | General shape of property         |
+| Total Full Bath         | Sum of above ground full baths and basement full baths         |
+| Total Half Bath         | Sum of above ground half baths and basement half baths         |
+| TotRms AbvGrd         | Total rooms above grade (does not include bathrooms)         |
+| Garage Area         | Size of garage in square feet         |
+| Misc Val         | Value of miscellaneous feature         |
+| Total Bsmt SF         | Total square feet of basement area         |
+| House Style         | Style of dwelling         |
+| Bldg Type         | Type of dwelling         |
+| Sale Condition         | Condition of sale         |
+| Sale Type         | Type of sale         |
+| Neighborhood         | Physical locations within Ames city limits (map available)         |
+| Misc Feature         | Miscellaneous feature not covered in other categories         |
+| Garage Type         | Garage location         |
 
-#### Primary Learning Objectives:
+## Executive Summary
 
--   Understand the Ames Housing dataset through EDA. 📊
--   Perform any necessary data cleaning and feature engineering. 🧹
--   Prepare a clean dataset for modeling. ✔️
+### Data Cleaning Steps
+Missing Data was filled in using the data dictionary. Many of the "missing" values actually represented a feature that wasn't part of that house. For example, Garage Quality had many missing values, but this meant that there was no garage. So using the data dictionary, I filled in the missing values with "No {feature_name}", where feature name is Garage, Basement, Pool, etc. 
 
-#### Exploring the Dataset
+Outliers were mostly left in the dataset so that the model would be able to learn from that data where some houses may have abnormally large square footage, basements, etc., as in turn, they may have higher prices. One outlier that was removed was a Garage Year Built, where the year was 2207. 
 
-You will start by exploring the Ames Housing dataset, which contains over 70 features related to the properties in Ames, Iowa. Your goal is to identify relationships, correlations, and any potential outliers that could affect the prediction model later on.
+In the end, only 4 rows were removed, as it was not worth filling them in with a value. 
 
-In the **EDA.ipynb** notebook, you will:
+### Key Visualizations
+Include key visualizations that highlight important aspects of the data. Use graphs, charts, or any other visual representation to make your points.
 
--   Load and inspect the **ameshousing.csv** file. 🔍
--   Review the data dictionary [here](data/DataDocumentation.txt) to understand the meaning of each feature in the dataset. This is crucial for making informed decisions during your analysis.
--   Conduct Exploratory Data Analysis (EDA) by:
-    -   Analyzing distributions of key features. 📈
-    -   Identifying missing data and handling it appropriately (e.g., filling or removing). ❓
-    -   Identifying correlations between features and the target (sale price). 🔗
-    -   Visualizing relationships between variables using plots (e.g., histograms, scatter plots, heatmaps). 🎨
-    -   Identifying and handling outliers. ⚠️
+#### Visualization 1: Overall Quality vs Sale Price
+This is a regression plot showing the relationship between overall quality and sale price. We can see a clear positive correlation, where as the quality of the house increases, so does the sale price. This was the strongest correlation in the dataset. 
 
-#### Feature Engineering:
+![Visualization 1](./images/overall_qual_vs_sale.png)
 
--   Create new features or transform existing ones if necessary. 🔄
+#### Visualization 2: Full Bathrooms vs Sale Price
+This is a regression plot showing the relationship between the number of full bathrooms (contains 4 primary features: toilet, sink, bathtub, shower) and sale price. We can see a clear positive correlation,although not as strong the as correlation between overall quality and sale price. 
 
-#### Data Cleaning:
+![Visualization 2](./images/full_bath_vs_sale.png)
 
--   Handle missing values and remove or impute outliers for the **ameshousing.csv**.
--   Apply the same cleaning methods consistently to the entire dataset to ensure a clean version for modeling, without dropping any rows.
+## Model Performance
 
-At the end of your EDA, you should have a clean dataset ready for modeling.
+### Model Selection
+For this project, I used Linear Regression as the main modeling algorithim. I also used Ridge and Lasso regression fro regularization, but this had minimal effect and performed the same/worse than linear regression (depending on the alpha).
 
-#### Saving the Cleaned Dataset
+I also used Decision Tree Regression, Linear SVR (Support Vector Regression), and Random Forest Regression for comparison. 
 
-Once you have completed the EDA and data cleaning, save the cleaned dataframe as a new CSV file to be used for the next step.\
-Save your work in **EDA.ipynb**. 💾
+### Evaluation Metrics
+Summarize the performance of the model(s) using key evaluation metrics (e.g., RMSE, R²).
 
-```python
-# Example code to save cleaned dataset
-dataset_df.to_csv('cleaned_ameshousing.csv')
-```
+| Model             | RMSE     | R²       |
+|-------------------|----------|----------|
+| Linear Regression | 30,019   | 0.86     |
+| Decision Tree Regression  | 33,615  | 0.83  |
+| Linear SVR | 45,258 | 0.69 |
+| Random Forest Regression | 22,677 | 0.92 |
 
-* * * * *
+#### Visualization 2: Actual vs Predicted Pricing (Linear Regression)
+This is a scatterplot of the actual prices on the X-axis, and my model's predicted values on the Y-axis. We can see that my model is very accurate for the majority of the test set, but starts to get further from the actual price as the prices get higher. This may be due to random noise in the higher priced houses, or due to a combonation of features that were unused for the sake of performance. The red dashed line shows that the perfect model would be. 
 
-### Part 2: Modeling Process 📈
+![Visualization 2](./images/act_vs_pred_lr.png)
 
-Once you have completed your EDA and saved your cleaned dataset, you will now build a regression model in the **modeling.ipynb** notebook.
+### Kaggle Submissions (if applicable)
+Mention the Kaggle competition results or leaderboard placement if relevant.
 
-#### Set-Up 🛠️
+## Conclusions/Recommendations
+With the features I chose to include, I was able to create a very strong prediction algorithim to accuarately predict housing prices within $30,000. From the features I included, many of them related to the quality/condition of different aspects of the house, like overall quality, exterior quality, kitchen quality, etc. as these all had strong positive correlations to the sale price. This indicates that the better quality of the house, the better the sale price would be. There should be professional teams that improve the quality of a home before it is put on the market. 
 
-Before you begin working on the modeling process, complete the following steps:
-
--   Ensure you have a clean dataset (`cleaned_ameshousing.csv`) from the EDA step.
--   Review the material on the regression modeling process.
-
-#### The Modeling Process
-
-In **modeling.ipynb**, you will:
-
--   Load the **cleaned_ameshousing.csv** file. 📥
--   Use the cleaned data to create and refine a regression model.
--   Split your data into training and testing sets. 🔄
--   Perform feature selection if necessary. ⚙️
--   Train the model using Linear Regression. 📊
--   Evaluate the performance using metrics like RMSE or R². 📈
--   Make predictions on the cleaned dataset.
-
-#### Model Evaluation, Enhancement, and Iteration
-
--   Document any improvements or enhancements made to the model throughout the process. This includes any changes in features, parameters, or model adjustments.
--   Track the decisions you make to improve model performance, such as how you addressed overfitting, underfitting, or performance bottlenecks.
--   Evaluate your model performance using appropriate metrics and adjust your model as needed. Consider:
-    -   How your model generalizes to new data.
-    -   Iterating on the model by tuning hyperparameters or refining features.
-
-* * * * *
-
-#### Final Deliverables:
-
--   **Technical Report**: Create your own **README.md** file for this project.
--   **Notebooks**: Submit the **EDA.ipynb** and **modeling.ipynb** notebooks.
--   **Cleaned Dataset**: Submit the **cleaned_ameshousing.csv** file.
--   **Presentation**: A 5-10 minute presentation detailing your findings, model performance, and key recommendations.
-
-Be sure to **document your model improvements and enhancements** in your notebooks, including the reasoning behind any decisions you made to refine your model.
-
-## 📝 Rubric
-The grading for this project will be based on three primary categories: **Functional**, **Interpersonal**, and **Technical**. Each category includes specific dimensions that will be evaluated on a scale from 1 to 5. To pass the project, you must score **3 or higher** in each component.
-
-| FIT Category | Dimension | Exemplary (5) | Proficient (4) | Minimally Career-Ready (3) | Needs Improvement (2) | Incomplete Work (1) |
-| --- | --- | --- | --- | --- | --- | --- |
-| Functional | Value/Impact | Deep, impactful insights with clear application to housing market strategies and decisions. | Actionable insights with strong relevance to housing market decisions. | Some meaningful insights, but lacks strong application to the domain. | Minimal insights with unclear relevance to the housing market. | No meaningful insights or model predictions. |
-|  | Requirements | Fully detailed steps, with deep insights and consistency throughout. | All key steps thoroughly completed with full attention to detail. | All key steps present but lacks detail or consistency in some parts. | Missing some steps or minimal effort in parts of the process. | Missing key steps, incomplete work. |
-|  | Timelines | Ahead of schedule, with strong planning and time management. | On time with proper time management. | On time but rushed or incomplete. | Late with minimal explanation. | Significantly late without explanation. |
-| Interpersonal | Professionalism | Highly polished, engaging, and professional throughout. | Clear, professional, and well-organized. | Professional tone, but lacks clarity or polish in some parts. | Somewhat professional but lacking clarity in sections. | Unprofessional tone, unclear, and poorly structured. |
-|  | Presentation | Highly engaging, clear, and visually appealing with strong storytelling. | Well-organized, engaging, and visually appealing presentation. | Clear presentation, but lacks some visual appeal or engagement. | Somewhat unclear and lacking visual organization. | Disorganized and unclear presentation. |
-|  | Feedback | Fully integrates feedback, demonstrating a strong learning curve and improvements. | Actively engages with feedback and refines the work accordingly. | Incorporates some feedback with moderate refinement. | Minimal engagement or slight changes based on feedback. | No engagement with feedback. |
-| Technical | Complexity | Advanced and deep exploration with advanced feature engineering techniques. | Thorough EDA with comprehensive cleaning and innovative feature engineering. | Solid exploration, cleaning, and feature engineering with some complexity. | Some exploration and cleaning, but limited feature engineering. | Very basic or incomplete analysis, minimal feature engineering. |
-|  | Design | Exceptionally well-organized notebooks with clear and thorough explanations and commentary. | Well-organized notebooks with clear structure, comments, and explanations. | Clear and organized notebooks but lacking some explanations or comments in some parts. | Somewhat organized notebooks with minimal clarity in explanations. | Poorly structured notebooks, unclear code. |
-|  | Reliability | Reliable, highly accurate model with clear explanations of data handling and robust predictions. | Accurate model with correct handling of outliers, missing data, and well-structured predictions. | Generally correct model performance, but lacks some consistency or clarity. | Some errors in model predictions, outliers, or missing data handling. | Numerous errors in data cleaning or model performance. |
-
-
-**Passing Criteria:**
-
-*   **Minimum Requirement**: A score of **3 or higher** in each component to pass.
-*   **Total Points/Percentages**: These are provided for informational purposes but do not affect the passing criteria.
-
-* * *
