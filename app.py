@@ -21,7 +21,7 @@ def predict():
     # reshapes the array of the inputs into a format the model can understand. 
     output=regmodel.predict(input_array)[0]
     # makes the prediction of the inputs passed in with the model. 
-    return render_template("home.html", prediction_test="The predicted house value  is {}".format(output))
+    return render_template("home.html", prediction_test=output)
 # returns the home.html template with prediction_test value passed in so it displays on the page. 
 
 if __name__=="__main__":

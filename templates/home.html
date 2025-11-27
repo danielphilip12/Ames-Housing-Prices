@@ -14,23 +14,32 @@
   <body class="bg-info">
     <div class="container">
       <h1 class="display-1 text-center">Ames Housing Price Prediction</h1>
+      <br />
       <div class="row">
         <div class="col">
-          <form action="/predict" method="POST">
+          <form
+            action="/predict"
+            method="POST"
+            class="bg-primary p-3 mb-2 rounded border border-danger"
+          >
             <div class="row">
               <div class="col-6">
-                <label for="Overall Qual" class="form-label"
-                  >Overall Qual:</label
+                <label for="Overall Qual" class="form-label text-light"
+                  >Overall Quality:</label
                 >
                 <input
-                  type="text"
+                  type="number"
                   name="Overall Qual"
                   class="form-control"
+                  min="1"
+                  max="10"
                   required
                 />
               </div>
               <div class="col-6">
-                <label for="Year Built" class="form-label">Year Built:</label>
+                <label for="Year Built" class="form-label text-light"
+                  >Year Built:</label
+                >
                 <input
                   type="text"
                   name="Year Built"
@@ -41,57 +50,83 @@
             </div>
             <div class="row">
               <div class="col-6">
-                <label for="Total Bsmt SF" class="form-label"
-                  >Total Bsmt SF:</label
+                <label for="Total Bsmt SF" class="form-label text-light"
+                  >Total Basement Square Footage:</label
                 >
                 <input
-                  type="text"
+                  type="number"
                   name="Total Bsmt SF"
                   class="form-control"
+                  min="0"
                   required
                 />
               </div>
               <div class="col-6">
-                <label for="Total Full Bath" class="form-label"
-                  >Total Full Bath:</label
+                <label for="Total Full Bath" class="form-label text-light"
+                  >Total Full Bathrooms:</label
                 >
                 <input
-                  type="text"
+                  type="number"
                   name="Total Full Bath"
                   class="form-control"
+                  min="0"
                   required
                 />
               </div>
             </div>
             <div class="row">
               <div class="col-6">
-                <label for="Total Half Bath" class="form-label"
-                  >Total Half Bath:</label
+                <label for="Total Half Bath" class="form-label text-light"
+                  >Total Half Bathrooms:</label
                 >
                 <input
-                  type="text"
+                  type="number"
                   name="Total Half Bath"
                   class="form-control"
+                  min="0"
                   required
                 />
               </div>
               <div class="col-6">
-                <label for="Gr Liv Area" class="form-label">Gr Liv Area:</label>
+                <label for="Gr Liv Area" class="form-label text-light"
+                  >Above Ground Area Square Footage:</label
+                >
                 <input
-                  type="text"
+                  type="number"
                   name="Gr Liv Area"
                   class="form-control"
+                  min="0"
                   required
                 />
               </div>
             </div>
             <br />
-            <button type="submit" class="btn btn-primary">Predict</button>
+            <button type="submit" class="btn btn-success btn-lg col-12">
+              Predict
+            </button>
           </form>
         </div>
         <div class="col">
           {% if prediction_test %}
-          <h2 class="text-dark-emphasis">{{ prediction_test }}</h2>
+          <div class="card bg-primary border border-danger">
+            <div class="card-body">
+              <h5 class="card-title">Prediction Result</h5>
+
+              <p
+                class="card-text display-6 bg-success p-3 mb-2 rounded text-white"
+              >
+                The predicted house value is {{
+                "${:,.2f}".format(prediction_test) }}
+                <!-- The predicted house value is ${{ prediction_test }} -->
+              </p>
+           
+            </div>
+            <div
+              class="card-footer text-body-secondary card-subtitle text-body-secondary"
+            >
+              NOTE: Actual Price will be within ~$37,000 on average
+            </div>
+          </div>
           {% endif %}
         </div>
       </div>
